@@ -1,8 +1,8 @@
 node_modules
 contactService.js
-hubspot.js
+hubspotClient.js
 package-lock.json
-processAction.js
-Meeting.js
+actionProcessor.js
+models.js
 index.js
 .env

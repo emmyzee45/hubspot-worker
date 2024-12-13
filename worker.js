@@ -1,4 +1,3 @@
-const hubspot = require('@hubspot/api-client');
 const { processAction } = require('./actionProcessor');
 
 class HubSpotMeetingsWorker {
@@ -9,7 +8,6 @@ class HubSpotMeetingsWorker {
 
   async processMeetings() {
     try {
-      // Fetch meetings modified in the last 24 hours
       const meetingsResponse = await this.fetchRecentMeetings();
       
       for (const meeting of meetingsResponse.results) {
@@ -17,7 +15,6 @@ class HubSpotMeetingsWorker {
       }
     } catch (error) {
       console.error('Error processing meetings:', error);
-      // Consider adding more robust error handling and logging
     }
   }
 
@@ -26,7 +23,7 @@ class HubSpotMeetingsWorker {
     
     return this.hubspotClient.crm.objects.basicApi.getPage(
       'meetings', 
-      10,  // Pagination limit
+      10,
       undefined,
       [
         'hs_meeting_title', 
@@ -35,18 +32,15 @@ class HubSpotMeetingsWorker {
         'hs_created_by', 
         'hs_timestamp'
       ],
-      `hs_timestamp:>${yesterday.toISOString()}`  // Filter for recently modified meetings
+      `hs_timestamp:>${yesterday.toISOString()}`
     );
   }
 
   async processIndividualMeeting(meeting) {
-    // Determine action type
     const actionType = this.determineMeetingActionType(meeting);
     
-    // Fetch meeting attendees (contacts)
     const attendeeEmails = await this.fetchMeetingAttendees(meeting.id);
     
-    // Process each attendee
     for (const email of attendeeEmails) {
       const actionData = {
         meetingId: meeting.id,
@@ -62,7 +56,6 @@ class HubSpotMeetingsWorker {
   }
 
   determineMeetingActionType(meeting) {
-    // Logic to determine if this is a new or updated meeting
     const createdDate = new Date(meeting.createdAt);
     const modifiedDate = new Date(meeting.updatedAt);
 
@@ -72,8 +65,6 @@ class HubSpotMeetingsWorker {
   }
 
   async fetchMeetingAttendees(meetingId) {
-    // This would typically involve a separate API call or database lookup
-    // For this implementation, we'll use a hypothetical method
     try {
       const attendees = await this.contactService.getMeetingAttendees(meetingId);
       return attendees.map(contact => contact.email);
