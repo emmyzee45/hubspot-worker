@@ -1,0 +1,19 @@
+{
+  "name": "hubspot",
+  "version": "1.0.0",
+  "main": "worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Emmanuel",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hubspot/api-client": "^12.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.8.4",
+    "node-cron": "^3.0.3",
+    "uuid": "^11.0.3"
+  }
+}
